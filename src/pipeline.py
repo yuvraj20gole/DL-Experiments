@@ -2,6 +2,7 @@
 
 from pathlib import Path
 
+import joblib
 import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
@@ -10,7 +11,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
 NUMERIC_FEATURES = ["Age", "Fare", "FamilySize"]
-CATEGORICAL_FEATURES = ["Sex", "Embarked", "Pclass"]
+CATEGORICAL_FEATURES = ["Sex", "Embarked", "Title", "Pclass", "IsAlone"]
 FALLBACK_URL = (
     "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv"
 )
@@ -44,7 +45,9 @@ def get_titanic_data(path: str = "data/raw/titanic.csv") -> pd.DataFrame:
     """Load Titanic data from disk or fetch it from an available source."""
     data_path = Path(path)
     if data_path.exists():
-        return _standardize_columns(pd.read_csv(data_path))
+        df = _standardize_columns(pd.read_csv(data_path))
+        if "Name" in df.columns:
+            return df
 
     data_path.parent.mkdir(parents=True, exist_ok=True)
     errors = []
@@ -53,8 +56,10 @@ def get_titanic_data(path: str = "data/raw/titanic.csv") -> pd.DataFrame:
         import seaborn as sns
 
         df = _standardize_columns(sns.load_dataset("titanic"))
-        df.to_csv(data_path, index=False)
-        return df
+        if "Name" in df.columns:
+            df.to_csv(data_path, index=False)
+            return df
+        errors.append("seaborn dataset missing Name column")
     except Exception as exc:
         errors.append(f"seaborn.load_dataset failed: {exc}")
 
@@ -112,10 +117,17 @@ class TitanicPreprocessor:
         self.numeric_features = NUMERIC_FEATURES
         self.categorical_features = CATEGORICAL_FEATURES
         self.transformer = None
+        self.preprocessor = None
 
     def load_data(self, path: str) -> pd.DataFrame:
         """Load titanic.csv into a pandas DataFrame."""
         return _standardize_columns(pd.read_csv(path))
+
+    def extract_title(self, df: pd.DataFrame) -> pd.DataFrame:
+        """Extract passenger title from Name before the column is dropped."""
+        extracted = df.copy()
+        extracted["Title"] = extracted["Name"].str.extract(r" ([A-Za-z]+)\.")
+        return extracted
 
     def clean(self, df: pd.DataFrame) -> pd.DataFrame:
         """Drop unused columns and fill missing Embarked values."""
@@ -158,6 +170,7 @@ class TitanicPreprocessor:
     def fit_transform(self, df: pd.DataFrame) -> pd.DataFrame:
         """Fit the transformer on df and return transformed features."""
         self.transformer = self.build_transformer()
+        self.preprocessor = self.transformer
         feature_frame = df[self.numeric_features + self.categorical_features]
         transformed = self.transformer.fit_transform(feature_frame)
         return pd.DataFrame(transformed)
@@ -175,15 +188,24 @@ class TitanicPreprocessor:
 if __name__ == "__main__":
     df = get_titanic_data()
 
-    preprocessor = TitanicPreprocessor()
-    df = preprocessor.clean(df)
-    df = preprocessor.feature_engineer(df)
+    print(df.info())
+    print(df.isnull().sum())
+
+    pre = TitanicPreprocessor()
+    df = pre.extract_title(df)
+    print(df["Title"].value_counts())
+
+    df = pre.clean(df)
+    df = pre.feature_engineer(df)
 
     train_df, val_df, test_df = split_data(df)
 
-    x_train = preprocessor.fit_transform(train_df)
-    x_val = preprocessor.transform(val_df)
-    x_test = preprocessor.transform(test_df)
+    x_train = pre.fit_transform(train_df)
+    x_val = pre.transform(val_df)
+    x_test = pre.transform(test_df)
+
+    joblib.dump(pre.preprocessor, "titanic_preprocessing_pipeline.pkl")
+    print("Pipeline Saved Successfully")
 
     print("Train shape:", x_train.shape)
     print("Validation shape:", x_val.shape)

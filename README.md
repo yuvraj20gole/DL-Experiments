@@ -24,12 +24,14 @@ Then place the file at `data/raw/titanic.csv`.
 ## Pipeline Steps
 
 1. **Load data** — read CSV from `data/raw/titanic.csv` (or fetch it automatically)
-2. **Clean** — drop `Cabin`, `Ticket`, `Name`, and `PassengerId`; fill missing `Embarked` with the mode
-3. **Feature engineering** — add `FamilySize` (`SibSp + Parch + 1`) and `IsAlone`
-4. **Split** — stratified 70/15/15 train/validation/test split with no leakage
-5. **Transform** — fit preprocessing on train only, then transform validation and test sets using:
+2. **Title extraction** — extract `Title` from `Name` using a regex before dropping name columns
+3. **Clean** — drop `Cabin`, `Ticket`, `Name`, and `PassengerId`; fill missing `Embarked` with the mode
+4. **Feature engineering** — add `FamilySize` (`SibSp + Parch + 1`) and `IsAlone`
+5. **Split** — stratified 70/15/15 train/validation/test split with no leakage
+6. **Transform** — fit preprocessing on train only, then transform validation and test sets using:
    - Numeric (`Age`, `Fare`, `FamilySize`): median imputation + `StandardScaler`
-   - Categorical (`Sex`, `Embarked`, `Pclass`): most frequent imputation + `OneHotEncoder`
+   - Categorical (`Sex`, `Embarked`, `Title`, `Pclass`, `IsAlone`): most frequent imputation + `OneHotEncoder`
+7. **Save pipeline** — persist the fitted sklearn preprocessor with joblib to `titanic_preprocessing_pipeline.pkl` in the project root
 
 ## Project Structure
 
@@ -59,7 +61,11 @@ From the project root:
 python src/pipeline.py
 ```
 
-This will fetch/load the dataset, preprocess it, split it, fit on the training set, transform validation and test sets, and print the resulting shapes.
+This will fetch/load the dataset, preprocess it, split it, fit on the training set, transform validation and test sets, save the fitted pipeline with joblib, and print the resulting shapes.
+
+## Results and Report
+
+See `notebooks/explore.ipynb` for a report-style results section with missing-value handling, feature engineering summary, dataset split shapes, and a completion checklist.
 
 ## Explore in a Notebook
 
@@ -67,4 +73,4 @@ This will fetch/load the dataset, preprocess it, split it, fit on the training s
 jupyter notebook notebooks/explore.ipynb
 ```
 
-The notebook imports the pipeline, loads data, runs cleaning and feature engineering, and displays a quick sanity check with `head()` and missing-value counts.
+The notebook imports the pipeline, loads data, runs title extraction, cleaning, and feature engineering, and includes a results/report section with missing-value handling, feature engineering summary, dataset split shapes, and a completion checklist.
