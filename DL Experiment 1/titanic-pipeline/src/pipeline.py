@@ -200,13 +200,17 @@ if __name__ == "__main__":
 
     train_df, val_df, test_df = split_data(df)
 
+    print("Training Set:", train_df.shape)
+    print("Validation Set:", val_df.shape)
+    print("Testing Set:", test_df.shape)
+
     x_train = pre.fit_transform(train_df)
     x_val = pre.transform(val_df)
     x_test = pre.transform(test_df)
 
+    print("Processed Training Set:", x_train.shape)
+    print("Processed Validation Set:", x_val.shape)
+    print("Processed Testing Set:", x_test.shape)
+
     joblib.dump(pre.preprocessor, "titanic_preprocessing_pipeline.pkl")
     print("Pipeline Saved Successfully")
-
-    print("Train shape:", x_train.shape)
-    print("Validation shape:", x_val.shape)
-    print("Test shape:", x_test.shape)
