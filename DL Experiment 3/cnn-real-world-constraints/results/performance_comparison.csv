@@ -1,0 +1,3 @@
+Configuration,Test Accuracy,Overfitting Gap
+Without Augmentation,0.670199990272522,0.04035264253616333
+With Augmentation + Class Weights,0.7674000263214111,-0.05692636966705322
