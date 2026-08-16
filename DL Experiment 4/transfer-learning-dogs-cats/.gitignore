@@ -1,0 +1,14 @@
+dataset/raw/*
+dataset/train/*
+dataset/val/*
+dataset/test/*
+!dataset/train/.gitkeep
+!dataset/val/.gitkeep
+!dataset/test/.gitkeep
+__pycache__/
+.venv/
+.ipynb_checkpoints/
+*.h5
+*.keras
+outputs.zip
+.DS_Store
