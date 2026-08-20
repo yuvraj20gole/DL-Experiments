@@ -11,6 +11,7 @@ A collection of deep learning and machine learning experiments for coursework an
 | 3 | [DL Experiment 3/cnn-real-world-constraints](DL%20Experiment%203/cnn-real-world-constraints/) | CIFAR-10 CNN with augmentation and class imbalance handling |
 | 4 | [DL Experiment 4/transfer-learning-dogs-cats](DL%20Experiment%204/transfer-learning-dogs-cats/) | ResNet50 transfer learning on Dogs vs Cats (feature extraction vs fine-tuning) |
 | 5 | [DL Experiment 5/nlp-imdb-lstm](DL%20Experiment%205/nlp-imdb-lstm/) | IMDB sentiment classification with Embedding + LSTM |
+| 6 | [DL Experiment 6/time-series-forecasting](DL%20Experiment%206/time-series-forecasting/) | Airline Passengers LSTM forecasting with lag features and RMSE |
 
 ## Repository structure
 
@@ -44,6 +45,12 @@ DL-Experiments/
 ├── DL Experiment 5/
 │   └── nlp-imdb-lstm/
 │       ├── README.md
+│       ├── notebooks/
+│       └── requirements.txt
+├── DL Experiment 6/
+│   └── time-series-forecasting/
+│       ├── README.md
+│       ├── data/
 │       ├── notebooks/
 │       └── requirements.txt
 └── ...
