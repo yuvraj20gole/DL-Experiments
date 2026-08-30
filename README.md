@@ -14,6 +14,7 @@ A collection of deep learning and machine learning experiments for coursework an
 | 6 | [DL Experiment 6/time-series-forecasting](DL%20Experiment%206/time-series-forecasting/) | Airline Passengers LSTM forecasting with lag features and RMSE |
 | 7 | [DL Experiment 7/model-optimization](DL%20Experiment%207/model-optimization/) | Quantization & pruning on the MNIST baseline ANN (Experiment 2) |
 | 8 | [DL Experiment 8/model-deployment-api-ui](DL%20Experiment%208/model-deployment-api-ui/) | Flask REST API + Streamlit UI serving the MNIST baseline ANN (Experiment 2) |
+| 9 | [DL Experiment 9/mlops-basics](DL%20Experiment%209/mlops-basics/) | MLOps practices: Docker containerization, pytest test suite, and GitHub Actions CI workflow |
 
 ## Repository structure
 
@@ -65,6 +66,13 @@ DL-Experiments/
 │       ├── README.md
 │       ├── app.py
 │       ├── ui.py
+│       └── requirements.txt
+├── DL Experiment 9/
+│   └── mlops-basics/
+│       ├── README.md
+│       ├── app.py
+│       ├── Dockerfile
+│       ├── tests/
 │       └── requirements.txt
 └── ...
 ```
