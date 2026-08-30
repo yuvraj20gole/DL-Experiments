@@ -15,6 +15,7 @@ A collection of deep learning and machine learning experiments for coursework an
 | 7 | [DL Experiment 7/model-optimization](DL%20Experiment%207/model-optimization/) | Quantization & pruning on the MNIST baseline ANN (Experiment 2) |
 | 8 | [DL Experiment 8/model-deployment-api-ui](DL%20Experiment%208/model-deployment-api-ui/) | Flask REST API + Streamlit UI serving the MNIST baseline ANN (Experiment 2) |
 | 9 | [DL Experiment 9/mlops-basics](DL%20Experiment%209/mlops-basics/) | MLOps practices: Docker containerization, pytest test suite, and GitHub Actions CI workflow |
+| 10 | [DL Experiment 10/responsible-ai-evaluation](DL%20Experiment%2010/responsible-ai-evaluation/) | Responsible AI: confusion matrix, classification report, subgroup fairness (Sex), and SHAP explainability |
 
 ## Repository structure
 
@@ -73,6 +74,13 @@ DL-Experiments/
 │       ├── app.py
 │       ├── Dockerfile
 │       ├── tests/
+│       └── requirements.txt
+├── DL Experiment 10/
+│   └── responsible-ai-evaluation/
+│       ├── README.md
+│       ├── notebooks/
+│       ├── reports/
+│       ├── models/
 │       └── requirements.txt
 └── ...
 ```
